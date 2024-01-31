@@ -14,6 +14,7 @@ readonly PUSH_IMAGE="$3"
 readonly PUSH_IMAGE_INDEX="$4"
 readonly PUSH_IMAGE_REPOSITORY_FILE="$5"
 readonly PUSH_IMAGE_WO_TAGS="$6"
+readonly PUSH_IMAGE_W_EMPTY_TAGS="$7"
 
 
 # should push image with default tags
