@@ -37,6 +37,15 @@ if [ -n "${TAGS}" ]; then
     exit 1
 fi
 
+# should push image without default tags
+REPOSITORY="${REGISTRY}/local-w-empty-tags" 
+"${PUSH_IMAGE_W_EMPTY_TAGS}" --repository "${REPOSITORY}"
+TAGS=$("${CRANE}" ls "$REPOSITORY")
+if [ -n "${TAGS}" ]; then 
+    echo "image is not supposed to have any tags but got"
+    echo "${TAGS}"
+    exit 1
+fi
 
 # should push image to the repository defined in the file
 set -ex
@@ -48,6 +57,16 @@ REPOSITORY="${REGISTRY}/repository-file"
 # should push image with the --tag flag.
 REPOSITORY="${REGISTRY}/local-flag-tag" 
 "${PUSH_IMAGE_WO_TAGS}" --repository "${REPOSITORY}" --tag "custom"
+TAGS=$("${CRANE}" ls "$REPOSITORY")
+if [ "${TAGS}" != "custom" ]; then 
+    echo "image is supposed to have custom tag but got"
+    echo "${TAGS}"
+    exit 1
+fi
+
+# should push image with the --tag flag.
+REPOSITORY="${REGISTRY}/local-flag-tag-on-empty" 
+"${PUSH_IMAGE_W_EMPTY_TAGS}" --repository "${REPOSITORY}" --tag "custom"
 TAGS=$("${CRANE}" ls "$REPOSITORY")
 if [ "${TAGS}" != "custom" ]; then 
     echo "image is supposed to have custom tag but got"
